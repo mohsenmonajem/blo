@@ -33,14 +33,25 @@
                  type: 'POST',
                  data: { _token: '{{ csrf_token() }}',textid:textid,replytext:$("#messages").val()},
                  success:function(data){
-                                                console.log(data["msg"]);
+                                       if(data["msg"]==0)
+                                        {
+                                          $("#reply").empty();
+                                          var text1='<div>قبلا به این پیام پاسخ داده شده است </div>';
+                                          var divBtn = $(text1);
+                                          divBtn.appendTo('#reply');
+                                        }
+                                        else
+                                        {
+                                          var text1='<div>  پاسخ ثبت شد</div>';
+                                          var divBtn = $(text1);
+                                          divBtn.appendTo('#reply');
+                                        }
                                        },
                  error: function ()
                  {
                      alert('error');
                  },
                });
-
               });
            });
     });

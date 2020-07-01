@@ -104,9 +104,22 @@ class studentController extends Controller {
       $savedemand->datestudent=collect($shamsi)->implode('-');
       $savedemand->timestudent=$ldate->formatTime();
       $savedemand->isread=false;
+      $savedemand->studentread=false;
       $savedemand->darsid=$request->input("darsid");
       $savedemand->save();
       return response()->json( array( 'msg'=> 1 ), 200 );
+    }
+    public function showmessageforstudent()
+    {
+       $message=demand::wherestudentuserid(Session::get('userid'))->get();
+       foreach($element in $dars)
+       {
+         if($element->replyteacher==null)
+           continue;
+          $darsdetail[$count]=Dars::whereid($element->darsid);
+          $count++;
+       }
+       
     }
 }
 ?>

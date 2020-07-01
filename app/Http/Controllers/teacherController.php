@@ -153,6 +153,7 @@ class teacherController extends Controller {
     }
     public function showmessagegetdars()
     {
+
              $teacherid = Teacher::whereuserid( Session::get( 'userid' ) )->pluck( 'teacherkey' )->first();
              $getlessonid=DB::table( 'dars_teacher' )->where( 'teacher_id', $teacherid )->pluck( 'dars_id' );
               if(count($getlessonid)==0)
@@ -189,23 +190,33 @@ class teacherController extends Controller {
           $studentuserid=str_replace('}', ' ', $studentuserid);
           $darsid=str_replace('{', ' ', $darsid);
           $darsid=str_replace('}', ' ', $darsid);
-          $message=demand::whereteacheruserid(Session::get('userid'))->where('darsid',$darsid)->where('studentuserid',$studentuserid)->where('replyteacher',null)->get();
+          $message=demand::whereteacheruserid(Session::get('userid'))->where('darsid',$darsid)->where('studentuserid',$studentuserid)->get();
+          foreach ($message as $element)
+          {
+             $element->isread=true;
+          }
           return view('teacher.showstudentmessage')->with('message',$message);
     }
     public function replyteacher(Request $request)
     {
            $textid=$request->input('textid');
            $replyteacher=$request->input('replytext');
-           $text=demand::wheretextid($textid)->first();
-           $text->replyteacher=$replyteacher;
            $ldate[0] = date('Y');
            $ldate[1] = date('m');
            $ldate[2] = date('d');
            $shamsi=Verta::getJalali($ldate[0],$ldate[1],$ldate[2]);
            $ldate =new verta();
            $ldate->addHours(5);
-           $text->dateteacher=collect($shamsi)->implode('-');;
-           $text->timeteacher=$ldate->formatTime();
-           $text->save();
+           $text=demand::wheretextid($textid)->first();
+           if($text->replyteacher!=null)
+             return response()->json( array( 'msg'=> 0), 200 );
+           demand::wheretextid($textid)->update(
+             [
+                    'dateteacher' => collect($shamsi)->implode('-'),
+                    'timeteacher' => $ldate->formatTime(),
+                    'replyteacher' => $replyteacher,
+             ]
+             );
+             return response()->json( array( 'msg'=> 1), 200 );
      }
 }
