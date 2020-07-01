@@ -101,7 +101,7 @@ class studentController extends Controller {
       $shamsi=Verta::getJalali($ldate[0],$ldate[1],$ldate[2]);
       $ldate =new verta();
       $ldate->addHours(5);
-      $savedemand->datestudent=collect($shamsi)->implode('-');;
+      $savedemand->datestudent=collect($shamsi)->implode('-');
       $savedemand->timestudent=$ldate->formatTime();
       $savedemand->isread=false;
       $savedemand->darsid=$request->input("darsid");

@@ -7,7 +7,6 @@
         <title>Laravel</title>
         <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
         <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
         <script src= "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
@@ -25,16 +24,16 @@
           $(".message").click(function() {
              $("#reply").empty();
              var textid =$(this).attr("value");
-              var text1='<div>'+$(this).text()+'</div><br><input type="text"><input type="button" value="ارسال">';
+              var text1='<div>'+$(this).text()+'</div><br><input type="text" id="messages" ><input type="button" value="ارسال">';
               var divBtn = $(text1);
               divBtn.appendTo('#reply');
              $("input:button").click(function() {
                $.ajax({
                  url: '/replyteacher',
                  type: 'POST',
-                 data: { _token: '{{ csrf_token() }}',textid:textid},
+                 data: { _token: '{{ csrf_token() }}',textid:textid,replytext:$("#messages").val()},
                  success:function(data){
-                                                alert("hi");
+                                                console.log(data["msg"]);
                                        },
                  error: function ()
                  {

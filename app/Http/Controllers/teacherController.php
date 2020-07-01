@@ -10,6 +10,8 @@ use App\Dars;
 use App\Teacher_dars;
 use App\TeacherRequest;
 use Illuminate\Support\Facades\DB;
+use Verta;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\mysql_connect;
@@ -192,7 +194,18 @@ class teacherController extends Controller {
     }
     public function replyteacher(Request $request)
     {
-
-
-    }
+           $textid=$request->input('textid');
+           $replyteacher=$request->input('replytext');
+           $text=demand::wheretextid($textid)->first();
+           $text->replyteacher=$replyteacher;
+           $ldate[0] = date('Y');
+           $ldate[1] = date('m');
+           $ldate[2] = date('d');
+           $shamsi=Verta::getJalali($ldate[0],$ldate[1],$ldate[2]);
+           $ldate =new verta();
+           $ldate->addHours(5);
+           $text->dateteacher=collect($shamsi)->implode('-');;
+           $text->timeteacher=$ldate->formatTime();
+           $text->save();
+     }
 }
