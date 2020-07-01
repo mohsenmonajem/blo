@@ -1,0 +1,47 @@
+<HTML>
+<HEAD>
+	<TITLE>Persian Calendar Test</TITLE>
+</HEAD>
+
+<Script Language="JavaScript" Src="dateScript.js"></Script>
+<Script Language="JavaScript" Src="persianPopupCalendar.js"></Script>
+
+<Script Language="JavaScript">
+	function onPageLoad() {
+		addCalendar("calFirstDate", "Select Date", "myFirstDate", "myForm");
+		addCalendar("calSecondDate", "Select Date", "mySecondDate", "myForm");
+	}
+</Script>
+
+<Script Language="JavaScript">
+function getClickedElement(evt) {
+	evt = evt || window.event;
+	var obj = evt.target || evt.srcElement;
+	return obj.nodeName;
+}
+
+function bodyClick(evt) {
+	var nodeName = getClickedElement(evt);
+	
+	if ((nodeName != 'IMG') && (nodeName != 'A'))
+		hideAllCalendars();
+}
+</Script>
+
+<BODY OnClick="bodyClick(event)" OnLoad="onPageLoad();">
+
+<Form Name="myForm" Method="Post" Action="">
+
+	<input type="text" name="myFirstDate" size="30" Value="">
+	<a href="javascript:void(0)" onclick="showCal('calFirstDate'); return false;" HIDEFOCUS><img name="popcal" align="absmiddle" src="calbtn.gif" border="0" alt="Select Date"></a>
+	
+	<br>
+	
+	<input type="text" name="mySecondDate" size="30" Value="">
+	<a href="javascript:void(0)" onclick="showCal('calSecondDate'); return false;" HIDEFOCUS><img name="popcal" align="absmiddle" src="calbtn.gif" border="0" alt="Select Date"></a>
+
+</Form>
+
+</BODY>
+
+</HTML>
