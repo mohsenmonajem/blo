@@ -112,7 +112,6 @@ class studentController extends Controller {
     public function showmessageforstudent()
     {
        $getdarsid=demand::wherestudentuserid(Session::get('userid'))->pluck('darsid');
-
       $getdarsid=$getdarsid->unique();
        $count=0;
        foreach(  $getdarsid as $element)
@@ -137,11 +136,29 @@ class studentController extends Controller {
       foreach ($teacherid as $element)
       {
           $teacherdetail[$count]=User::whereuserid($element )->first();
-          $numbernotreadmessage=demand::wherestudentuserid(Session::get('userid'))->where('teacheruserid',$element)->where('darsid',$request->input('darsid'))->where('studentread',0)->where('replyteacher','notnull')->get();
+          $numbernotreadmessage=demand::wherestudentuserid(Session::get('userid'))->where('teacheruserid',$element)->where('darsid',$request->input('darsid'))->where('studentread',0)->whereNotNull('replyteacher')->get();
+
           $notreadmessage[$count]=count($numbernotreadmessage);
           $count++;
       }
       return response()->json( array( 'numbermessage'=> $notreadmessage,'teacherdetail' => $teacherdetail ), 200 );
+    }
+    public function showmessageteacher($teacherid,$darsid)
+    {
+      $teacherid=str_replace('{', ' ', $teacherid);
+      $teacherid=str_replace('}', ' ', $teacherid);
+      $darsid=str_replace('{', ' ', $darsid);
+      $darsid=str_replace('}', ' ', $darsid);
+      $message=demand::whereteacheruserid($teacherid)->where('darsid',$darsid)->where('studentuserid',Session::get('userid'))->get();
+      foreach($message as $element)
+      {
+        demand::wheretextid($element->textid)->update(
+          [
+                 'studentread' => true,
+          ]
+          );
+      }
+      return view ('student.showmessageteacher')->with('message',$message);
     }
 }
 ?>
