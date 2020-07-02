@@ -110,7 +110,6 @@
                                   var name='<span style="border:2px solid black;">'+'<span><a href="/teacher/showusermessage/{'+data["userdetail"][i].userid+'}/{'+data["darsid"][i]+'}">'+data["userdetail"][i].name+data["userdetail"][i].family+'</a></span>'+data["numbermessage"][i]+'</span>';
                                   var text = $(name);
                                   text.appendTo('#userdata');
-                                  count++;
                                 }
                               }
                             },

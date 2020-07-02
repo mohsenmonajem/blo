@@ -186,6 +186,7 @@ class teacherController extends Controller {
     }
     public function getmessage($userid,$darsid)
     {
+
           $studentuserid=str_replace('{', ' ', $userid);
           $studentuserid=str_replace('}', ' ', $studentuserid);
           $darsid=str_replace('{', ' ', $darsid);
@@ -193,7 +194,11 @@ class teacherController extends Controller {
           $message=demand::whereteacheruserid(Session::get('userid'))->where('darsid',$darsid)->where('studentuserid',$studentuserid)->get();
           foreach ($message as $element)
           {
-             $element->isread=true;
+             demand::wheretextid($element->textid)->update(
+               [
+                      'isread' => true,
+               ]
+               );
           }
           return view('teacher.showstudentmessage')->with('message',$message);
     }
@@ -209,7 +214,7 @@ class teacherController extends Controller {
            $ldate->addHours(5);
            $text=demand::wheretextid($textid)->first();
            if($text->replyteacher!=null)
-             return response()->json( array( 'msg'=> 0), 200 );
+                 return response()->json( array( 'msg'=> 0), 200 );
            demand::wheretextid($textid)->update(
              [
                     'dateteacher' => collect($shamsi)->implode('-'),

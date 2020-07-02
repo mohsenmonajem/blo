@@ -65,6 +65,7 @@
     <body>
              <a href="/student/showclass">  ثبت نام در کلاس ها</a>
              <a href="/student/sendteacher">   درخوات به معلم</a>
+             <a href="/student/showmessage">    مشاهده پیام ها</a>
 
      </body>
 </html>

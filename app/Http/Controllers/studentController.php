@@ -111,15 +111,37 @@ class studentController extends Controller {
     }
     public function showmessageforstudent()
     {
-       $message=demand::wherestudentuserid(Session::get('userid'))->get();
-       foreach($element in $dars)
+       $getdarsid=demand::wherestudentuserid(Session::get('userid'))->pluck('darsid');
+
+      $getdarsid=$getdarsid->unique();
+       $count=0;
+       foreach(  $getdarsid as $element)
        {
-         if($element->replyteacher==null)
-           continue;
-          $darsdetail[$count]=Dars::whereid($element->darsid);
+          $dars[$count]=Dars::whereid($element)->first();
           $count++;
        }
-       
+      if($count==0)
+      {
+        $dars=null;
+         return view('student.showmessage')->with('dars',$dars);
+      }
+       return view('student.showmessage')->with('dars',$dars);
+    }
+    public function studentallmessage(Request $request)
+    {
+      $teacherid=demand::wheredarsid($request->input('darsid'))->wherestudentuserid(Session::get('userid'))->pluck('teacheruserid');
+      $teacherid=$teacherid->unique();
+       if($teacherid==null)
+        return response()->json( array( 'numbermessage'=> -1 ), 200 );
+      $count=0;
+      foreach ($teacherid as $element)
+      {
+          $teacherdetail[$count]=User::whereuserid($element )->first();
+          $numbernotreadmessage=demand::wherestudentuserid(Session::get('userid'))->where('teacheruserid',$element)->where('darsid',$request->input('darsid'))->where('studentread',0)->where('replyteacher','notnull')->get();
+          $notreadmessage[$count]=count($numbernotreadmessage);
+          $count++;
+      }
+      return response()->json( array( 'numbermessage'=> $notreadmessage,'teacherdetail' => $teacherdetail ), 200 );
     }
 }
 ?>

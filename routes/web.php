@@ -56,6 +56,9 @@ Route::group(['middleware' => 'checksessioncookies'], function() {
     Route::post('/getnamestudent','teacherController@getnamestudent');
     Route::get('/teacher/showusermessage/{userid}/{darsid}','teacherController@getmessage');
     Route::post('/replyteacher','teacherController@replyteacher');
+    Route::get('student/showmessage','studentController@showmessageforstudent');
+    Route::post('/getallstudentmessage','studentController@studentallmessage');
+
 });
 
 
